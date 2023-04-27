@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LogMedication">
+
+    <TextView
+        android:id="@+id/medication"
+        android:layout_width="117dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="292dp"
+        android:layout_marginBottom="605dp"
+        android:text="Medication: "
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        tools:layout_editor_absoluteX="67dp"
+        tools:layout_editor_absoluteY="151dp" />
+
+    <EditText
+        android:id="@+id/medicationText"
+        android:layout_width="222dp"
+        android:layout_height="81dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="51dp"
+        android:layout_marginEnd="69dp"
+        android:layout_marginBottom="599dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="" />
+
+    <ImageView
+        android:id="@+id/timeClick"
+        android:layout_width="50dp"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="timePicker"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="347dp"
+        android:layout_marginTop="71dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginBottom="612dp"
+        app:srcCompat="@drawable/ic_baseline_access_time_24" />
+
+    <TextView
+        android:id="@+id/timeText"
+        android:layout_width="226dp"
+        android:layout_height="43dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="65dp"
+        android:textSize="20sp"
+        android:layout_below="@id/medicationText"
+        android:textColor="@color/black"
+        android:layout_marginBottom="544dp"
+        android:text="" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:layout_marginStart="185dp"
+        android:layout_marginTop="191dp"
+        android:layout_marginEnd="138dp"
+        android:layout_marginBottom="492dp"
+        android:backgroundTint="@color/black"
+        android:text="LOG"
+        android:textColor="@color/white" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        app:menu="@menu/bottom_navigation">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+
+
+
+</RelativeLayout>
