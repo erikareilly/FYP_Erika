@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +13,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class Settings extends AppCompatActivity implements View.OnClickListener {
 
+    private Button info,notifications,logout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,7 +22,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
 
 
         BottomNavigationView bottomNav = (BottomNavigationView) findViewById(R.id.bottomNavigation);
-         bottomNav.setSelectedItemId(R.id.home);
+        bottomNav.setSelectedItemId(R.id.home);
         bottomNav.setSelectedItemId(R.id.person);
         bottomNav.setSelectedItemId(R.id.settings);
 
@@ -41,7 +44,28 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
             }
         });
 
+        info = (Button) findViewById(R.id.myInfo);
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Settings.this, MyInformation.class);
+                startActivity(intent);
+            }
+        });
+        notifications = (Button) findViewById(R.id.notifications);
+        notifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(Settings.this, Notifications.class);
+                startActivity(intent1);
+            }
+        });
+        logout = (Button) findViewById(R.id.logout);
+        logout.setOnClickListener(this);
+
     }
+
+
 
     @Override
     public void onClick(View v) {

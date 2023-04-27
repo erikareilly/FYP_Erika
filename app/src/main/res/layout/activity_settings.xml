@@ -15,4 +15,57 @@
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>
 
+    <Button
+        android:id="@+id/myInfo"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_above="@+id/bottomNavigation"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="538dp"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/black"
+        android:drawableRight="@drawable/ic_arrow_forward"
+        android:textSize="18sp"
+        android:textAlignment="textStart"
+        android:text="My Information" />
+
+    <Button
+        android:id="@+id/notifications"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_above="@+id/bottomNavigation"
+        android:textAlignment="textStart"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="179dp"
+        android:backgroundTint="@color/white"
+        android:drawableRight="@drawable/ic_arrow_forward"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:layout_marginEnd="-1dp"
+        android:layout_marginBottom="392dp"
+        android:text="Notifications" />
+
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_above="@+id/bottomNavigation"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="333dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="233dp"
+        android:backgroundTint="@color/white"
+        android:drawableRight="@drawable/ic_arrow_forward"
+        android:text="Logout"
+        android:textAlignment="textStart"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
 </RelativeLayout>
