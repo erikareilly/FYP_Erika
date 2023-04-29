@@ -185,6 +185,7 @@ private class openFDAEndpoint extends AsyncTask<String,Void,String>{
                     String genericName = openfda.getJSONArray("generic_name").getString(0);
                     Log.d(TAG, "Generic Name" + genericName);
                     if(warnings.length()>0) {
+                        //removed toast message to display dialog instead
                         // Toast.makeText(LogMedication.this,donot,Toast.LENGTH_LONG).show();
                         AlertDialog.Builder builder = new AlertDialog.Builder(LogMedication.this);
                         builder.setTitle("Warning");
