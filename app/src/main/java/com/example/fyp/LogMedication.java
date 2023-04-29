@@ -2,7 +2,9 @@ package com.example.fyp;
 
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -44,6 +46,7 @@ public class LogMedication extends AppCompatActivity implements View.OnClickList
     int hour, minute;
     LocalTime localTime;
     private Button logButton;
+    AlertDialog alertDialog;
     String medicationName;
     private String apiEndpoint =  "https://api.fda.gov/drug/label.json?search=openfda.generic_name:";
 
@@ -168,15 +171,34 @@ private class openFDAEndpoint extends AsyncTask<String,Void,String>{
     protected void onPostExecute(String s) {
 
         LocalDate date = CalendarUtils.selectedDate;
+
+
         try {
             JSONObject jsonObject = new JSONObject(s);
             JSONArray result = jsonObject.getJSONArray("results");
             for(int i =0; i<result.length();i++){
                 JSONObject resultObject = result.getJSONObject(i);
                 JSONObject openfda = resultObject.getJSONObject("openfda");
+                JSONArray warnings = resultObject.getJSONArray("do_not_use");
+                String donot = warnings.getString(0);
                 if(openfda.has("generic_name")){
                     String genericName = openfda.getJSONArray("generic_name").getString(0);
                     Log.d(TAG, "Generic Name" + genericName);
+                    if(warnings.length()>0) {
+                        // Toast.makeText(LogMedication.this,donot,Toast.LENGTH_LONG).show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(LogMedication.this);
+                        builder.setTitle("Warning");
+                        builder.setMessage(donot);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                finish();
+                            }
+                        });
+                        // Assign the dialog to the alertDialog variable
+                        alertDialog = builder.create();
+                        alertDialog.show();
+                    }
                     Medication newLog = new Medication(medicationName,localTime,date);
                     Medication.medsList.add(newLog);
                     FirebaseDatabase.getInstance().getReference("Users")
@@ -193,17 +215,21 @@ private class openFDAEndpoint extends AsyncTask<String,Void,String>{
                                 }
                             });
                     //end activity
-                    finish();
+                    //  finish();
+
+
                 }else{
                     Log.d(TAG, "No name found");
                 }
+
             }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //super.onPostExecute(s);
+        super.onPostExecute(s);
     }
+
 }
 
     }
