@@ -14,11 +14,16 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.time.LocalTime;
 import java.util.Calendar;
@@ -198,8 +203,23 @@ public class CreateNotification extends AppCompatActivity {
             timetext.setError("Time for notification required");
         }
 
-        //NotificationClass notificationClass = new NotificationClass(notifName,notifDesc,timeToNotify,date);
-       // NotificationClass.notifList.add(notificationClass);
+        NotificationClass notificationClass = new NotificationClass(notifName,notifDesc,timeToNotify,date);
+        NotificationClass.notifList.add(notificationClass);
+        FirebaseDatabase.getInstance().getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Notifications").push().setValue(notificationClass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(CreateNotification.this, "Notification has been created", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            Toast.makeText(CreateNotification.this, "Failed to create notification", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+        //end activity
+
         setNotification();
     }
 

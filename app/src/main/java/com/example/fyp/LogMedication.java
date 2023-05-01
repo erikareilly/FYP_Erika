@@ -48,6 +48,7 @@ public class LogMedication extends AppCompatActivity implements View.OnClickList
     private Button logButton;
     AlertDialog alertDialog;
     String medicationName;
+    String timeString, dateString;
     private String apiEndpoint =  "https://api.fda.gov/drug/label.json?search=openfda.generic_name:";
 
     @Override
@@ -113,6 +114,7 @@ public class LogMedication extends AppCompatActivity implements View.OnClickList
                 System.out.println(" in onTimeSet Setting Time "+ selectedHour);
                 timeText.setText(hour + ":" + minute);
                 localTime = LocalTime.of(hour,minute);
+                timeString = timeText.getText().toString();
             }
         };
         int style= android.app.AlertDialog.THEME_HOLO_DARK;
@@ -140,6 +142,7 @@ public class LogMedication extends AppCompatActivity implements View.OnClickList
 }
 
 private class openFDAEndpoint extends AsyncTask<String,Void,String>{
+
 
     @Override
     protected String doInBackground(String... params) {
@@ -170,7 +173,8 @@ private class openFDAEndpoint extends AsyncTask<String,Void,String>{
     @Override
     protected void onPostExecute(String s) {
 
-        LocalDate date = CalendarUtils.selectedDate;
+        LocalDate date = LocalDate.now();
+        dateString = String.valueOf(date);
 
 
         try {
@@ -200,7 +204,7 @@ private class openFDAEndpoint extends AsyncTask<String,Void,String>{
                         alertDialog = builder.create();
                         alertDialog.show();
                     }
-                    Medication newLog = new Medication(medicationName,localTime,date);
+                    Medication newLog = new Medication(medicationName,timeString,dateString);
                     Medication.medsList.add(newLog);
                     FirebaseDatabase.getInstance().getReference("Users")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Medication").push().setValue(newLog).addOnCompleteListener(new OnCompleteListener<Void>() {

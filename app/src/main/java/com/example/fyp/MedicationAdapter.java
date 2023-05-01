@@ -39,6 +39,7 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Me
         //holder.time1.setText(medication.getTime());
         holder.event.setText(medication.getMedicationName());
         holder.time.setText(medication.getTime());
+        holder.date.setText(medication.getDate());
         // mRef = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Medication");
 
 
@@ -52,12 +53,13 @@ public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.Me
 
     public static class MedicationViewHolder extends RecyclerView.ViewHolder{
 
-        TextView event, time;
+        TextView event, time,date;
         public MedicationViewHolder(@NonNull View itemView, ItemClickListener itemClickListener) {
             super(itemView);
 
             event = itemView.findViewById(R.id.medicationLayoutTV);
             time = itemView.findViewById(R.id.medicationTime);
+            date=itemView.findViewById(R.id.medicationDate);
         }
     }
 

@@ -106,7 +106,7 @@ public class LogMedicine extends AppCompatActivity implements ItemClickListener 
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 // String value = snapshot.getValue(Medication.class).toString();
-                medications = snapshot.getValue(Medication.class).getMedicationName()+"      " +snapshot.getValue(Medication.class).getTime();
+                medications = snapshot.getValue(Medication.class).getMedicationName()+"      " +snapshot.getValue(Medication.class).getTime()+ "  " + snapshot.getValue(Medication.class).getDate();
                 timeOf = snapshot.getValue(Medication.class).getTime();
 
                 arrayList.add(medications);

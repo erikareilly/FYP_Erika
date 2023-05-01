@@ -8,7 +8,7 @@ public class Medication {
 
     String medicationName;
     private String time;
-    private LocalDate date;
+    private String date;
 
 
     public static ArrayList<Medication> medsList = new ArrayList<>();
@@ -41,7 +41,7 @@ public class Medication {
         return meds;
     }*/
 
-    public Medication(String medicationName, String time, LocalDate date){
+    public Medication(String medicationName, String time, String date){
         this.medicationName = medicationName;
         this.time=time;
         this.date=date;
@@ -63,11 +63,11 @@ public class Medication {
         this.time = time;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 }
