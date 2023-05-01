@@ -9,79 +9,57 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MedicationAdapter extends ArrayAdapter<Medication> {
+public class MedicationAdapter extends RecyclerView.Adapter<MedicationAdapter.MedicationViewHolder>{
 
-    public MedicationAdapter(@NonNull Context context, List<Medication> medications) {
-        super(context,0, medications);
+    private final ItemClickListener itemClickListener;
+    Context context;
+    ArrayList<Medication> list;
+
+    public MedicationAdapter(Context context, ArrayList<Medication>list,ItemClickListener itemClickListener ){
+        this.context=context;
+        this.list=list;
+        this.itemClickListener=itemClickListener;
     }
-
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Medication medication = getItem(position);
-
-        if(convertView==null){
-            //inflate to layout of list view
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.medicationlayout, parent, false);
-        }
-
-        TextView eventLayoutTV=convertView.findViewById(R.id.medicationLayoutTV);
-
-        String medsTitle = medication.getMedicationName()+ " " + CalendarUtils.formattedTime(medication.getTime());
-        eventLayoutTV.setText(medsTitle);
-        return convertView;
-}
-
-
-    private void setTime(View convertView, LocalTime time) {
-        TextView timeText =convertView.findViewById(R.id.time);
-        timeText.setText(CalendarUtils.formattedShortTime(time));
+    public MedicationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(context).inflate(R.layout.medicationlayout,parent, false);
+        return new MedicationAdapter.MedicationViewHolder(v, itemClickListener);
     }
 
-    private void setMeds(View convertView, ArrayList<Medication> meds) {
-        TextView event1 =convertView.findViewById(R.id.event1);
-       // TextView event2 =convertView.findViewById(R.id.event2);
-        //TextView event3 =convertView.findViewById(R.id.event3);
-//if no events hide event 1
-        if(meds.size()==0){
-            hideMeds(event1);
-          //  hideEvent(event2);
-            //hideEvent(event3);
+    @Override
+    public void onBindViewHolder(@NonNull MedicationAdapter.MedicationViewHolder holder, int position) {
+        Medication medication = list.get(position);
+        //holder.time1.setText(medication.getTime());
+        holder.event.setText(medication.getMedicationName());
+        holder.time.setText(medication.getTime());
+        // mRef = FirebaseDatabase.getInstance().getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Medication");
 
-        }else if(meds.size()==1){
-            setMeds(event1, meds.get(0));
-           // hideEvent(event2);
-            //hideEvent(event3);
-        }
-        /*else  if(meds.size()==2){
-            setMeds(event1, meds.get(0));
-            setEvent(event2, meds.get(1));
-            hideEvent(event3);
-        }
-        else if(meds.size()==3){
-            setMeds(event1, events.get(0));
-            setEvent(event2, events.get(1));
-            setEvent(event3, events.get(2));
-        }
-        else{
-            setEvent(event1, events.get(0));
-            setEvent(event2, events.get(1));
-            event3.setVisibility(View.VISIBLE);
-    }*/
-    }
-    private void setMeds(TextView textView, Medication medication) {
-        textView.setText(medication.getMedicationName());
-        textView.setVisibility(View.VISIBLE);
+
 
     }
 
-    private void hideMeds(TextView tv) {
-        tv.setVisibility(View.INVISIBLE);
+    @Override
+    public int getItemCount() {
+        return list.size();
     }
+
+    public static class MedicationViewHolder extends RecyclerView.ViewHolder{
+
+        TextView event, time;
+        public MedicationViewHolder(@NonNull View itemView, ItemClickListener itemClickListener) {
+            super(itemView);
+
+            event = itemView.findViewById(R.id.medicationLayoutTV);
+            time = itemView.findViewById(R.id.medicationTime);
+        }
+    }
+
 
 }

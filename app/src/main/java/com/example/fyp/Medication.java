@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Medication {
 
     String medicationName;
-    private LocalTime time;
+    private String time;
     private LocalDate date;
 
 
@@ -28,7 +28,7 @@ public class Medication {
         return meds;
     }
 
-    public static ArrayList<Medication> medsForHour(LocalDate date, LocalTime time){
+    /*public static ArrayList<Medication> medsForHour(LocalDate date, LocalTime time){
         ArrayList<Medication> meds = new ArrayList<>();
         for(Medication medication: medsList){
             int medHour = medication.time.getHour();
@@ -39,9 +39,9 @@ public class Medication {
         }
 
         return meds;
-    }
+    }*/
 
-    public Medication(String medicationName, LocalTime time, LocalDate date){
+    public Medication(String medicationName, String time, LocalDate date){
         this.medicationName = medicationName;
         this.time=time;
         this.date=date;
@@ -55,11 +55,11 @@ public class Medication {
         this.medicationName = medicationName;
     }
 
-    public LocalTime getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(LocalTime time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
