@@ -33,7 +33,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Chat Service"
+                    android:text="Enter key word to recieve information"
                     android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -46,12 +46,6 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chatrecycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/chatlayout"
-        android:layout_below="@id/toolbar" />
 
     <LinearLayout
         android:id="@+id/chatlayout"
@@ -81,6 +75,22 @@
             android:src="@drawable/ic_arrow_forward" />
 
     </LinearLayout>
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="402dp"
+        android:layout_height="606dp"
+        android:layout_above="@+id/chatlayout"
+        android:layout_below="@+id/toolbar"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="4dp"
+        android:text=""
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
 
 
 

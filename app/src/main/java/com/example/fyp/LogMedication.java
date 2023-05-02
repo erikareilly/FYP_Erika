@@ -132,8 +132,8 @@ public class LogMedication extends AppCompatActivity implements View.OnClickList
             String encodedGenericName = URLEncoder.encode(medicationName, "UTF-8");
             String queryUrl = apiEndpoint + encodedGenericName;
             new openFDAEndpoint().execute(queryUrl);
-            Intent intent = new Intent(LogMedication.this, LogMedicine.class);
-            startActivity(intent);
+            //Intent intent = new Intent(LogMedication.this, LogMedicine.class);
+           // startActivity(intent);
         }catch (Exception e) {
             Log.e(TAG, "Error encoding query parameter", e);
         }

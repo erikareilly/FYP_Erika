@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.time.LocalTime;
 import java.util.List;
 
 public class EventAdapter extends ArrayAdapter<Event> {
@@ -31,8 +32,10 @@ public class EventAdapter extends ArrayAdapter<Event> {
 
         TextView eventLayoutTV=convertView.findViewById(R.id.eventLayoutTV);
 
-        String eventTitle = event.getEvName()+ " " + CalendarUtils.formattedTime(event.getTime());
+        String eventTitle = event.getEvName()+ " " + CalendarUtils.formattedTime(LocalTime.parse(event.getTime()));
         eventLayoutTV.setText(eventTitle);
         return convertView;
     }
 }
+
+

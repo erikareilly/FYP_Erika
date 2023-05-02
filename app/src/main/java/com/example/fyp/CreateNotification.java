@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -39,6 +41,8 @@ public class CreateNotification extends AppCompatActivity {
     private LocalTime time;
     private String timeToNotify,date;
     String notifName, notifDesc;
+    private CheckBox repeat;
+    boolean checked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +71,15 @@ public class CreateNotification extends AppCompatActivity {
                 return false;
             }
         });
-
+        repeat = (CheckBox) findViewById(R.id.checkBox);
+        repeat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    checked=true;
+                }
+            }
+        });
         titleText = (EditText) findViewById(R.id.notifTitle);
         descriptionText = (EditText) findViewById(R.id.notifDescrip);
         datetext = (TextView) findViewById(R.id.date);
@@ -112,7 +124,7 @@ public class CreateNotification extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int day) {
                 month = month+1;
-                 date = makeDateString(day,month,year);
+                date = makeDateString(day,month,year);
                 datetext.setText(date);
             }
         };
@@ -192,8 +204,8 @@ public class CreateNotification extends AppCompatActivity {
     }
 
     public void saveNotification() {
-         notifName = titleText.getText().toString().trim();
-         notifDesc = descriptionText.getText().toString().trim();
+        notifName = titleText.getText().toString().trim();
+        notifDesc = descriptionText.getText().toString().trim();
 
         //validate title data
         if (notifName.isEmpty()) {
@@ -233,11 +245,14 @@ public class CreateNotification extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), NotificationBroadcast.class);
         intent.putExtra("title", notifName);
         intent.putExtra("descr", notifDesc);
-       // intent.putExtra("time", time);
-     //   intent.putExtra("date", date);
+        // intent.putExtra("time", time);
+        //   intent.putExtra("date", date);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+       /* if(checked==true){
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        }
 
         /*if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.O){
             NotificationChannel channel= new NotificationChannel("My Notification","My Notification",NotificationManager.IMPORTANCE_DEFAULT);
@@ -260,11 +275,11 @@ public class CreateNotification extends AppCompatActivity {
             //   e.printStackTrace();
             //}*/
 
-            finish();
+        finish();
 
     }
 
-    }
+}
 
 
 

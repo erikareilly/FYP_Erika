@@ -122,8 +122,8 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
             }
     }
         hospitalPointer(latlng);
-
-      //  pharmacyPointer(latlng);
+        pharmacyPointer(latlng);
+        GPPointer(latlng);
     }
 
     @Override
@@ -178,7 +178,7 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
-    /* public void pharmacyPointer(LatLng latLng) {
+     public void pharmacyPointer(LatLng latLng) {
         StringBuilder builder = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         builder.append("location=" + latLng.latitude + "," + latLng.longitude);
         builder.append("&radius=" + 10000);
@@ -192,6 +192,7 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
         GetNearbyPlaces getNearbyPlaces = new GetNearbyPlaces();
         getNearbyPlaces.execute(object);
     }
+
         public void GPPointer (LatLng latLng){
             StringBuilder builder1 = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
             builder1.append("location=" + latLng.latitude + "," + latLng.longitude);
@@ -205,7 +206,7 @@ public class LocationPage extends AppCompatActivity implements OnMapReadyCallbac
 
             GetNearbyPlaces getNearbyPlace = new GetNearbyPlaces();
             getNearbyPlace.execute(objects);
-        }*/
+        }
 
 
 

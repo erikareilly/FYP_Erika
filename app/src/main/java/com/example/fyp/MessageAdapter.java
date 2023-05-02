@@ -20,12 +20,10 @@ import java.util.List;
 import java.util.Locale;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder>{
-private static final int MSG_TYPE_LEFT = 0;
-private static final int MSG_TYPR_RIGHT = 1;
-        Context context;
-        List<Message> list;
-        //String imageurl;
-        FirebaseUser firebaseUser;
+    private static final int MSG_TYPE_LEFT = 0;
+    private static final int MSG_TYPR_RIGHT = 1;
+    Context context;
+    List<Message> list;
 
     public MessageAdapter(Context context, List<Message> list) {
         this.context = context;
@@ -72,28 +70,27 @@ private static final int MSG_TYPR_RIGHT = 1;
         return list.size();
     }
 
-    @Override
+   /* @Override
     public int getItemViewType(int position) {
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (list.get(position).getSender().equals(firebaseUser.getUid())) {
             return MSG_TYPR_RIGHT;
         } else {
             return MSG_TYPE_LEFT;
         }
-    }
+    }*/
 
     class MessageViewHolder extends RecyclerView.ViewHolder {
 
         ImageView mimage;
         TextView message, time, isSee;
-        LinearLayout msglayput;
+        LinearLayout msglayout;
 
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
             message = itemView.findViewById(R.id.msgc);
             time = itemView.findViewById(R.id.timetv);
             isSee = itemView.findViewById(R.id.isSeen);
-            msglayput = itemView.findViewById(R.id.linearright);
+            msglayout = itemView.findViewById(R.id.linearright);
             mimage = itemView.findViewById(R.id.images);
         }
     }

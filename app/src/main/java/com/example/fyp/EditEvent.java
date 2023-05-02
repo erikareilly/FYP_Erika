@@ -33,8 +33,9 @@ public class EditEvent extends AppCompatActivity {
     private TextView timeText,dateText;
     int hour, minute;
     private LocalTime time;
-    private LocalDate dates;
+    //  private LocalDate dates;
     private LocalDateTime date1;
+    String time1;
 
 
 
@@ -75,8 +76,8 @@ public class EditEvent extends AppCompatActivity {
 
         time = LocalTime.of(hour,minute);
         dateText.setText(/*"Date: " +*/ CalendarUtils.formattedDate(CalendarUtils.selectedDate));
-       // timeText.setText("Time: " + CalendarUtils.formattedTime(time));
-       // timeText.setText(String.format(Locale.getDefault(), "%02d:%02d",hour, minute));
+        // timeText.setText("Time: " + CalendarUtils.formattedTime(time));
+        // timeText.setText(String.format(Locale.getDefault(), "%02d:%02d",hour, minute));
 
     }
 
@@ -92,6 +93,7 @@ public class EditEvent extends AppCompatActivity {
                 //timeText.setText(String.format(Locale.getDefault(), "%02d:%02d",hour, minute));
                 timeText.setText(hour + ":" + minute);
                 time = LocalTime.of(hour,minute);
+                time1 = String.valueOf(time);
             }
         };
         int style= AlertDialog.THEME_HOLO_DARK;
@@ -105,29 +107,28 @@ public class EditEvent extends AppCompatActivity {
         String eventName = nameEdit.getText().toString().trim();
         String eventDescription = descriptionEdit.getText().toString().trim();
         DateTimeFormatter formatter = new DateTimeFormatterBuilder().parseCaseInsensitive().appendPattern("dd MMM yyyy").toFormatter(Locale.ENGLISH);
-       date1 = LocalDateTime.from(LocalDate.parse(CalendarUtils.formattedDate(CalendarUtils.selectedDate),formatter).atStartOfDay());
+        date1 = LocalDateTime.from(LocalDate.parse(CalendarUtils.formattedDate(CalendarUtils.selectedDate),formatter).atStartOfDay());
+        String date = String.valueOf(date1);
+        //create new event
+        Event newEvent = new Event(eventName, eventDescription, date, time1);
+        //add event to list
+        Event.eventsList.add(newEvent);
+        //add event to firebase
+        FirebaseDatabase.getInstance().getReference("Users")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Event").push().setValue(newEvent).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(EditEvent.this, "Event has been created", Toast.LENGTH_SHORT).show();
 
-       //create new event
-            Event newEvent = new Event(eventName, eventDescription, date1, time);
-            //add event to list
-            Event.eventsList.add(newEvent);
-            //add event to firebase
-            //getting error because of Date
-            FirebaseDatabase.getInstance().getReference("Users")
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Event").push().setValue(newEvent).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Toast.makeText(EditEvent.this, "Event has been created", Toast.LENGTH_SHORT).show();
-
-                            } else {
-                                Toast.makeText(EditEvent.this, "Failed to create event", Toast.LENGTH_SHORT).show();
-                            }
-
+                        } else {
+                            Toast.makeText(EditEvent.this, "Failed to create event", Toast.LENGTH_SHORT).show();
                         }
-                    });
-            //end activity
-            finish();
-        }
+
+                    }
+                });
+        //end activity
+        finish();
+    }
 
 }

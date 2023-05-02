@@ -1,7 +1,13 @@
 package com.example.fyp;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -22,25 +28,36 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Chat extends AppCompatActivity {
-    Toolbar toolbar;
-    RecyclerView recyclerView;
-    ImageView profile;
-    TextView name;
+    // RecyclerView recyclerView;
+    // ImageView profile;
+    TextView name,chatText;
     EditText messageChat;
     ImageButton send;
     FirebaseAuth firebaseAuth;
-    ValueEventListener valueEventListener;
     List<Message> list;
-    MessageAdapter messageAdapter;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference reference;
+    //MessageAdapter messageAdapter;
+    // FirebaseDatabase firebaseDatabase;
+    // DatabaseReference reference;
     boolean notify = false;
+    String message;
     String uid, myuid;
+    AlertDialog alertDialog;
+    private String apiEndpoint =  "https://api.fda.gov/drug/label.json?search=drug_interactions:";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +68,8 @@ public class Chat extends AppCompatActivity {
         name = findViewById(R.id.nametv);
         messageChat = findViewById(R.id.message);
         send = findViewById(R.id.sendmsg);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        chatText = findViewById(R.id.textView2);
+       /* LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setStackFromEnd(true);
         recyclerView = findViewById(R.id.chatrecycler);
         recyclerView.setHasFixedSize(true);
@@ -59,18 +77,20 @@ public class Chat extends AppCompatActivity {
         uid = getIntent().getStringExtra("uid");
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        reference = firebaseDatabase.getReference("Users");
+        reference = firebaseDatabase.getReference("Users");*/
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 notify = true;
-                String message = messageChat.getText().toString().trim();
+                message = messageChat.getText().toString().trim();
+                //chatText.setText(message);
                 if (TextUtils.isEmpty(message)) {//if empty
-                    Toast.makeText(Chat.this, "Please Write Something Here", Toast.LENGTH_LONG).show();
+                    Toast.makeText(Chat.this, "Write Something Here", Toast.LENGTH_LONG).show();
                 } else {
                     sendmessage(message);
                 }
                 messageChat.setText("");
+                sendReply();
             }
         });
 
@@ -90,7 +110,7 @@ public class Chat extends AppCompatActivity {
     private void readMessages() {
         // show message after retrieving data
         list = new ArrayList<>();
-        DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Chat");
+       /* DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("Chat");
         dbref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -98,12 +118,9 @@ public class Chat extends AppCompatActivity {
                 list.clear();
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     Message message = dataSnapshot1.getValue(Message.class);
-                   /* if (message.getSender().equals("sender") &&
-                            message.getReceiver().equals("receiver") ||
-                            message.getReceiver().equals("sender")
-                                    && message.getSender().equals("receiver")) {*/
-                    list.add(message); // add the chat in chatlist
-                    // }
+                        list.add(message); // add the chat in chatlist
+                        sendReply();
+                   // }
                     messageAdapter = new MessageAdapter(Chat.this, list);
                     messageAdapter.notifyDataSetChanged();
                     recyclerView.setAdapter(messageAdapter);
@@ -114,14 +131,13 @@ public class Chat extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        });*/
     }
 
     private void sendmessage(final String message) {
         // creating a reference to store data in firebase
-        // We will be storing data using current time in "Chatlist"
-        // and we are pushing data using unique id in "Chats"
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        /*DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
         String timestamp = String.valueOf(System.currentTimeMillis());
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -160,8 +176,83 @@ public class Chat extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        });*/
     }
+
+    private void sendReply(){
+        try {
+            String encodedGenericName = URLEncoder.encode(message, "UTF-8");
+            String queryUrl = apiEndpoint + encodedGenericName+"&limit=1";
+            new Chat.openFDAEndpoint().execute(queryUrl);
+            //Intent intent = new Intent(LogMedication.this, LogMedicine.class);
+            // startActivity(intent);
+        }catch (Exception e) {
+            Log.e(TAG, "Error encoding query parameter", e);
+        }
+    }
+
+    private class openFDAEndpoint extends AsyncTask<String,Void,String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String queryUrl = params[0];
+            try {
+                URL url = new URL(queryUrl);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                try {
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line).append("\n");
+                    }
+                    bufferedReader.close();
+                    return stringBuilder.toString();
+                } finally {
+                    urlConnection.disconnect();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+                JSONObject jsonObject = new JSONObject(s);
+                JSONArray result = jsonObject.getJSONArray("results");
+                for(int i =0; i<result.length();i++) {
+                    JSONObject resultObject = result.getJSONObject(i);
+                    JSONArray precautions = resultObject.getJSONArray("precautions");
+                    String warnings = precautions.getString(0);
+                    if(precautions.length()>0){
+                        //messageChat.setText(warnings);
+                        //chatText.setText(warnings);
+                        // Toast.makeText(Chat.this, warnings, Toast.LENGTH_LONG).show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(Chat.this);
+                        builder.setTitle("Precautions");
+                        builder.setMessage(warnings);
+                        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+
+                            }
+                        });
+                        // Assign the dialog to the alertDialog variable
+                        alertDialog = builder.create();
+                        alertDialog.show();
+                    }
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            super.onPostExecute(s);
+        }
+    }
+
 
 
 
